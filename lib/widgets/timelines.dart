@@ -9,35 +9,44 @@ class Timelines extends StatefulWidget {
 }
 
 class _TimelinesState extends State<Timelines> {
-  int item = 20;
+  int item = 5;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Timeline'),
+          title: const Text('Timeline'),
         ),
         body: ListView.builder(
             itemCount: item,
             itemBuilder: (context, index) {
-              return (index == 0)
-                  ? DayStartContainer()
-                  : Stack(
+              if (index == 0) {
+                return const DayStartContainer();
+              } else if (index == item - 1) {
+                return const DayEndContainer();
+              }
+              return Stack(
                 children: [
                   Container(
-                    decoration: BoxDecoration(
-                        color: Colors.black12,
+                    decoration: const BoxDecoration(
                         border: Border(
-                            left: BorderSide(
-                                color: Colors.blue, width: 4))),
-                    margin: EdgeInsets.only(left: 40),
-                    width: MediaQuery.of(context).size.width - 40,
-                    child: SizedBox(
-                        height: 80, child: Center(child: Text('sameer'))),
+                            left: BorderSide(color: Colors.blue, width: 4))),
+                    margin: const EdgeInsets.only(left: 20),
+                    child: Column(
+                      children: [
+                        Title(),
+                        Center(
+                          child: TaskActivity(
+                              title: 'Sku Availability',
+                              action: 'Details >',
+                              onAction: () {}),
+                        ),
+                      ],
+                    ),
                   ),
-                  Positioned(
+                  const Positioned(
                     child: BulletIcon(),
-                    top: (index == 0) ? 0 : 10,
-                    left: 33,
+                    top: 8,
+                    left: 13,
                   ),
                 ],
               );
@@ -55,7 +64,7 @@ class BulletIcon extends StatelessWidget {
         height: 18,
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.all(Radius.circular(9)),
+          borderRadius: const BorderRadius.all(Radius.circular(9)),
           border: Border.all(color: Colors.blue, width: 4),
         ));
   }
@@ -69,17 +78,36 @@ class DayStartContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(32, 20, 0, 0),
+      padding: const EdgeInsets.fromLTRB(12, 20, 0, 0),
       child: Row(
         children: [
-          BulletIcon(),
+          SizedBox(
+            height: 70,
+            child: Stack(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 24),
+                  child: BulletIcon(),
+                ),
+                Positioned(
+                  top: 40,
+                  left: 8,
+                  child: Container(
+                    width: 4,
+                    height: 34,
+                    color: Colors.blue,
+                  ),
+                )
+              ],
+            ),
+          ),
           Container(
-            height: 60,
-            padding: EdgeInsets.only(left: 10),
+            height: 70,
+            padding: const EdgeInsets.only(left: 10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Day Start"),
+                const Text("Day Start"),
                 Text(time),
               ],
             ),
@@ -97,21 +125,170 @@ class DayEndContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(32, 20, 0, 0),
+      padding: const EdgeInsets.fromLTRB(12, 0, 0, 20),
       child: Row(
         children: [
-          BulletIcon(),
+          SizedBox(
+            height: 60,
+            child: Stack(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.only(top: 20),
+                  child: BulletIcon(),
+                ),
+                Positioned(
+                  bottom: 36,
+                  left: 8,
+                  child: Container(
+                    width: 4,
+                    height: 24,
+                    color: Colors.blue,
+                  ),
+                )
+              ],
+            ),
+          ),
           Container(
             height: 60,
-            padding: EdgeInsets.only(left: 10),
+            padding: const EdgeInsets.only(left: 10),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Day End"),
+                const Text("Day End"),
                 Text(time),
               ],
             ),
           )
+        ],
+      ),
+    );
+  }
+}
+
+class Title extends StatelessWidget {
+  const Title(
+      {this.title = 'Opening Stock',
+      this.time = '00:00 AM',
+      this.duration = "25 Min",
+      Key? key})
+      : super(key: key);
+
+  final String title;
+  final String time;
+  final String duration;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+      child: Row(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                    color: Colors.blue, fontWeight: FontWeight.w800),
+              ),
+              Text(
+                time,
+              )
+            ],
+          ),
+          const Spacer(),
+          Text(duration)
+        ],
+      ),
+    );
+  }
+}
+
+class OutletActivity extends StatelessWidget {
+  const OutletActivity({Key? key}) : super(key: key);
+
+  @override
+  Widget build(context) {
+    return Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Opening Stock',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w800),
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          Container(
+            padding: EdgeInsets.all(20),
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.black12, width: 2),
+                borderRadius: const BorderRadius.all(Radius.circular(5))),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '23.5',
+                      style: TextStyle(fontWeight: FontWeight.w700),
+                    ),
+                    Text('Value ()')
+                  ],
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('23', style: TextStyle(fontWeight: FontWeight.w700)),
+                    Text('Std qty (Kg)')
+                  ],
+                ),
+                SizedBox(
+                  width: 30,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('23', style: TextStyle(fontWeight: FontWeight.w700)),
+                    Text('Lines cut')
+                  ],
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class TaskActivity extends StatelessWidget {
+  const TaskActivity(
+      {required this.title,
+      required this.action,
+      required this.onAction,
+      Key? key})
+      : super(key: key);
+
+  final String title;
+  final String action;
+  final void Function() onAction;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.all(20),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(title, style: TextStyle(fontWeight: FontWeight.w800)),
+          Text(action)
         ],
       ),
     );
